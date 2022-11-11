@@ -29,62 +29,95 @@ class StudentController extends Controller
     # membuat method store
     public function store(Request $request)
     {
+        $student = New Student();
+
         # menangkap data request
-        $input = [
-            'nama' => $request->nama,
-            'nim' => $request->nim,
-            'email' => $request->email,
-            'jurusan' => $request->jurusan,
-        ];
+        $student->nama = $request->input('nama');
+        $student->nim = $request->input('nim');
+        $student->email = $request->input('email');
+        $student->jurusan = $request->input('jurusan');
 
         # menggunakan Student untuk insert data
-        $student = Student::create($input);
+        $student->save();
 
         $data = [
             'message' => 'Student is created successfully',
             'data' => $student,
         ];
 
-        # mengembalikan data (json) status code 201
-        return response()->json($data, 201);
+        # mengembalikan data (json) status code 200
+        return response()->json($data, 200);
+    }    
 
         
+    // mendapatkan detail resource student
+    // membuat method show
+    public function show($id)
+    {
+        // mencari data student
+        $student = Student::find($id);
+
+        if($student)
+        {
+            $data = [
+                'messege'=>'Get Detail Student',
+                'data'=>$student,
+            ];
+    
+            // mengambil data json status code 200
+            return response()->json($data,200);
+        }else{
+            $data = [
+                'message' => 'student not found',
+            ];
+
+            // mengembalikan data json
+            return response()->json($data,404);
+        }
     }
 
-    // Update Data
-    public function update($id, Request $request)
+    // mengupdate resouce student
+    // membuat method update
+    public function update(Request $request, $id)
     {
-        $input=[
+        // cari data student yg ingin di update
+        $student = Student::find($id);
+
+        // mendapatkan data request
+        $input = [
             'nama' => $request->nama,
             'nim' => $request->nim,
             'email' => $request->email,
             'jurusan' => $request->jurusan,
-       ];
-
-       Student::Find($id)->update($input);
-       $student=Student::find($id);
-
-       $data=[
-        'message' => 'Student Berhasil di Update',
-        'data' => $student,
-       ];
-
-       return response()->json($data,201);
+        ];
+        $student->update($input);
+    
+        $data = [
+            'message' => 'Resource student update',
+            'data' => $student,
+        ];
+        // mengirimkan respon json dengan status code 200
+        return response()->json($data,200);
     }
 
-    // Menghapus Data
+
     public function destroy($id)
     {
-        $student = Student::FindOrFail($id);
-        if($student->delete()){
-            return response([
-                'Berhasil Menghapus Data'
-            ]);
+        $student = Student::find($id);
+
+        if($student){
+            $student->delete();
+        $data = [
+            'message'=>'Student is deleted',
+        ];
+
+        // mengembalikan data json status code 200
+        return response()->json($data,200);
         }else{
-            //response jika gagal menghapus
-            return response([
-                'Tidak Berhasil Menghapus Data'
-            ]);
+            $data = [
+                'message'=>'Student not found',
+            ];
+            return response()->json($data,404);
         }
-    }    
+    }
 }
