@@ -5,7 +5,7 @@ const Student = require("../models/Student");
 // Membuat Class StudentController
 class StudentController {
   // menambah keyword async
-  async index(req, res) {
+    async index(req, res) {
 
     // Memanggil method static all dengan async await
     const students = await Student.all();
@@ -18,21 +18,20 @@ class StudentController {
 
     };
 
-  async store(req, res) {
-    // const {nama} = req.body;
+    async store(req, res) {
+      // const {nama} = req.body;
 
-    // Memanggil method static create dengan async await
-    const students = await Student.create(req.body);
-    
-    const data = {
-      message: `Menambahkan data student`,
-      data: students,
+      // Memanggil method static create dengan async await
+      const students = await Student.create(req.body);
+
+      const data = {
+        message: `Menambahkan data student`,
+        data: students,
+      };
+
+      res.json(data);
     };
 
-    res.json(data);
-  }
-
-  
 }
 
 // Membuat object StudentController
