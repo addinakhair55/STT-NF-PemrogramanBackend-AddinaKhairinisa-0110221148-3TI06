@@ -33,7 +33,6 @@ class Student{
                     resolve(results);
                 });
             });
-           
         });
     }
 
